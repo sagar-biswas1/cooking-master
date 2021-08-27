@@ -9,6 +9,7 @@ button.addEventListener("click", (e) => {
   const inputValue = document.getElementById("input-value").value;
 
   if (inputValue.length > 0) {
+    document.getElementById("spinner").classList.remove("d-none");
     getMealData(inputValue);
   } else {
     document.getElementById("error-message").innerHTML =
@@ -33,6 +34,7 @@ const getMealData = (mealName) => {
 const fetchedData = async (url) => {
   const response = await fetch(url);
   const data = await response.json();
+
   return data;
 };
 
@@ -40,6 +42,9 @@ const fetchedData = async (url) => {
 const mealCardDiv = (url) => {
   fetchedData(url)
     .then((data) => {
+      //turn of spinner
+      document.getElementById("spinner").classList.add("d-none");
+
       data.meals.forEach((element) => {
         //console.log(element)
 
