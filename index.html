@@ -10,12 +10,15 @@
       integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
       crossorigin="anonymous"
     />
-
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
+    />
     <title>Cooking Master</title>
   </head>
   <body>
     <header class="container">
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
           <a class="navbar-brand fw-bold" href="#">Cooking master</a>
           <button
@@ -43,8 +46,60 @@
               <li class="nav-item mx-2">
                 <a class="nav-link fw-bolder" href="#">Recipes</a>
               </li>
-              <li class="nav-item mx-2">
-                <a class="nav-link fw-bolder" href="#">Blog</a>
+              <li
+                class="nav-item mx-2"
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModal"
+              >
+                <i class="bi bi-basket nav-link fw-bolder text-primary"
+                  ><span class="mx-2" id="cartCount">0</span></i
+                >
+
+                <!-- Button trigger modal -->
+
+                <!-- Modal -->
+                <div
+                  class="modal fade"
+                  id="exampleModal"
+                  tabindex="-1"
+                  aria-labelledby="exampleModalLabel"
+                  aria-hidden="true"
+                >
+                  <div
+                    class="
+                      modal-dialog modal-dialog-centered modal-dialog-scrollable
+                    "
+                  >
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">
+                          Your platters
+                        </h5>
+                        <button
+                          type="button"
+                          class="btn-close"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        ></button>
+                      </div>
+                      <!-- here all selected products goes -->
+                      <div class="modal-body" id="cartProducts"></div>
+                      <!--  -->
+                      <div class="modal-footer">
+                        <button
+                          type="button"
+                          class="btn btn-secondary"
+                          data-bs-dismiss="modal"
+                        >
+                          Close
+                        </button>
+                        <button type="button" class="btn btn-primary">
+                          Confirm Order
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </li>
             </ul>
           </div>

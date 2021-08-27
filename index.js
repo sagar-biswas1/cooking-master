@@ -1,4 +1,5 @@
 const button = document.getElementById("submit-btn");
+let orderedProductsArray = [];
 
 button.addEventListener("click", (e) => {
   e.preventDefault();
@@ -40,12 +41,14 @@ const mealCardDiv = (url) => {
   fetchedData(url)
     .then((data) => {
       data.meals.forEach((element) => {
+        //console.log(element)
+
         const mealSets = document.getElementById("meal-items");
-        const { strMeal, strMealThumb } = element;
+        const { strMeal, strMealThumb, idMeal } = element;
 
         const mealDiv = document.createElement("div");
         mealDiv.className = "col m-auto";
-        let mealCard = ` <div class="m-3" style="cursor: pointer" onClick='singleMealData("${strMeal}")'>
+        let mealCard = ` <div class="m-3" style="cursor: pointer" onclick='singleMealData("${strMeal}")'>
           <div class="card h-100">
             <img
               src="${strMealThumb}"
@@ -54,7 +57,10 @@ const mealCardDiv = (url) => {
             <div class="card-footer text-center">
                <h6 class="card-title">${strMeal}</h6>
             </div>
+                 <button class='btn btn-info btn-sm mt-2'>See details</button>
           </div>
+
+     
         </div>`;
         mealDiv.innerHTML = mealCard;
 
@@ -73,7 +79,7 @@ const singleMealData = (itemName) => {
     `https://www.themealdb.com/api/json/v1/1/search.php?s=${itemName}`
   ).then((data) => {
     const singleMealInfo = data.meals[0];
-    const { strMeal, strMealThumb } = singleMealInfo;
+    const { strMeal, strMealThumb, idMeal } = singleMealInfo;
     const singleMealDiv = document.getElementById("product-info");
     singleMealDiv.innerHTML = `
  <div class="card m-auto" style="width: 20rem">
@@ -86,6 +92,7 @@ const singleMealData = (itemName) => {
      <p><b>Ingredients</b></p>
      <ul id="ingredient-list"></ul>
    </div>
+   <button class='btn btn-primary btn-sm' onclick='addToCart(${idMeal})'>Add to cart</button>
  </div>`;
     const list = document.getElementById("ingredient-list");
 
@@ -104,6 +111,64 @@ const singleMealData = (itemName) => {
     }
   });
 };
+
+//function for adding product to cart
+
+const addToCart = (productId) => {
+  const isMealInArray = orderedProductsArray.find((p) => p.idMeal == productId);
+
+  console.log("hhhhhhhhhiiiiiiiiii", isMealInArray);
+
+  if (isMealInArray !== undefined) {
+    isMealInArray.quantity++;
+    updateCart();
+  } else {
+    fetchedData(
+      `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${productId}`
+    ).then((data) => {
+      const { strMeal, strMealThumb, idMeal } = data.meals[0];
+
+      orderedProductsArray = [
+        ...orderedProductsArray,
+        { strMeal, strMealThumb, idMeal, quantity: 1 },
+      ];
+
+      updateCart();
+      console.log("hello", orderedProductsArray);
+    });
+  }
+};
+
+function updateCart() {
+  document.getElementById("cartCount").innerText = orderedProductsArray.length;
+
+  const cartDiv = document.getElementById("cartProducts");
+  cartDiv.innerHTML = "";
+
+  orderedProductsArray.map((p) => {
+    const mealDiv = document.createElement("div");
+
+    mealDiv.classList.add("card", "mb-3");
+    mealDiv.style.maxWidth = "540px";
+
+    mealDiv.innerHTML = `
+  <div class="row g-0">
+    <div class="col-md-4">
+      <img src='${p.strMealThumb}' class="img-fluid rounded rounded-circle p-3" alt="...">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body mt-3">
+        <h5 class="card-title"> ${p.strMeal}</h5>
+ <p>Quantity: ${p.quantity}</p>
+      </div>
+      
+    </div>
+  </div>
+`;
+
+    cartDiv.appendChild(mealDiv);
+  });
+}
 
 //function for displaying error message.
 const errorMessage = () => {
